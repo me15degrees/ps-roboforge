@@ -7,5 +7,3 @@ def num(num):
         return "FizzBuzz"
     return "#"
 
-result = num(7)
-print(result)
