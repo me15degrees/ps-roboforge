@@ -18,6 +18,7 @@ color_sensor = ColorSensor(Port.S2)
 DIAMETRO_RODA = 6.0
 DIST_ENTRE_RODAS = 14
 wall_distance = ultrasonic_sensor.distance()
+tolerate_dist = 0.4
 
 """
 O robô sempre deve andar paralelamente à parede, então eu guardo em uma variável essa distância e caso o sensor retorne algo diferente disso ele para de seguir os comandos.
@@ -40,7 +41,7 @@ def curva(graus_reais):
 
 robot = DriveBase(motorB,motorC, wheel_diameter=55.5,axle_track=104)
 
-while ultrasonic_sensor.distance() == wall_distance:
+while ultrasonic_sensor.distance() < wall_distance + tolerate_dist and ultrasonic_sensor.distance() > wall_distance - tolerate_dist:
     if color_sensor.color == Color.RED: 
         curva(90)
     if color_sensor.color == Color.YELLOW:
@@ -50,5 +51,5 @@ while ultrasonic_sensor.distance() == wall_distance:
     if color_sensor.color == Color.GREEN:
         robot.stop(Stop.BRAKE)
         break
-    else: 
-        robot.drive(200, 0)
+    
+    robot.drive(200, 0)
