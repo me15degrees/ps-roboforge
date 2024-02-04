@@ -18,7 +18,7 @@ def virar_direita(velocidade, tempo):
     motor_direito.run(speed=-velocidade)
     wait(tempo)
 
-if __name__ == "__main__":
+def main():
     ev3 = EV3Brick()
 
     motor_esquerdo = Motor(Port.B)
@@ -30,3 +30,6 @@ if __name__ == "__main__":
 
     motor_esquerdo.stop()
     motor_direito.stop()
+    
+if __name__ == "__main__":
+    main()
