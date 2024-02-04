@@ -17,9 +17,14 @@ color_sensor = ColorSensor(Port.S2)
 
 DIAMETRO_RODA = 6.0
 DIST_ENTRE_RODAS = 14
-
 wall_distance = ultrasonic_sensor.distance()
 
+"""
+O robô sempre deve andar paralelamente à parede, então eu guardo em uma variável essa distância e caso o sensor retorne algo diferente disso ele para de seguir os comandos.
+Talvez eu acrescentaria uma variável de tolerância em relação à variação dessa distância, já que eu não sei como é a precisão do sensor e não tenho como testar.
+Caso ele encontre a cor vermelha, é necessário girar 90 graus. Se encontrar amarelo ele espera o usuário apertar algum botão para sair do laço que segura o movimento.
+Se o encontrar verde ele para.
+"""
 
 def curva(graus_reais):
     motorB.reset_angle(0)
@@ -44,3 +49,6 @@ while ultrasonic_sensor.distance() == wall_distance:
             pass
     if color_sensor.color == Color.GREEN:
         robot.stop(Stop.BRAKE)
+        break
+    else: 
+        robot.drive(200, 0)
