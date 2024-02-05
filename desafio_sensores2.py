@@ -3,33 +3,39 @@ from pybricks.ev3devices import Motor
 from pybricks.parameters import Port
 from pybricks.tools import wait
 
-ev3 = EV3Brick()
-motor_esquerdo = Motor(Port.B)
-motor_direito = Motor(Port.C)
-
 """
 Para fazer um quadrado, existem dois movimentos básicos: andar para frente e virar.
 Separei esses movimentos em duas funções e usei como parâmetro para a função a velocidade e o tempo de espera para cada um deles de acordo com o código fonte.
+Como é interessante modularizar o código, pensei em fazer uma classe disso.
 """
 
-def mover_frente(velocidade, tempo):
-    motor_esquerdo.run(speed=velocidade)
-    motor_direito.run(speed=velocidade)
-    wait(tempo)
+class Robot:
+    def __init__(self):
+        self.ev3 = EV3Brick()
+        self.left_motor = Motor(Port.B)
+        self.right_motor = Motor(Port.C)
 
-def virar_direita(velocidade, tempo):
-    motor_esquerdo.run(speed=velocidade, time=tempo)
-    motor_direito.run(speed=0)
-    
+    def move_forward(self, speed, time):
+        self.left_motor.run(speed=speed)
+        self.right_motor.run(speed=speed)
+        wait(time)
+
+    def turn_right(self, speed, time):
+        self.left_motor.run_time(speed=speed, time=time)
+        self.right_motor(speed=0)
+
+    def execute_square(self):
+        for _ in range(4):
+            self.move_forward(200, 3000)
+            self.turn_right(400, 2000)  
+        self.left_motor.stop()
+        self.right_motor.stop()
+        self.left_motor.brake()
+        self.right_motor.brake()
+
 def main():
-    for _ in range(4):
-        mover_frente(200, 3000)  
-        virar_direita(400, 2000)  
+    robot = Robot()
+    robot.execute_square()
 
-    motor_esquerdo.stop()
-    motor_direito.stop()
-    motor_esquerdo.brake()
-    motor_direito.brake()
-    
 if __name__ == "__main__":
     main()
